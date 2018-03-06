@@ -78,6 +78,8 @@ def getCar():
     car_model = input("What model car do you want to work on? ")
     car_name = input("What's the name of the car you want to work on? ")
 
+    colors = ["red", "yellow", "blue"]
+
     #car_file = open(car_name, "r")
 
     modded = input("Does your car have any visual mods? [y/N] ")
@@ -101,11 +103,72 @@ def getCar():
             print(".", end="")
         print("")
         print("Done! ")
+
+    paint_or_wrap = input("Do you want to [P]aint or [w]rap the car? ")
+    if paint_or_wrap.lower() == "w":
+        print("wrap")
+    else:
+        print("paint")
+        color = input("What color would you like to paint the car? Type 'list' to view all of the colors. ")
+        while color:
+            if color.lower() == "list":
+                print("There's several colors to choose from, and more added with each update.")
+                print("Right now, you can choose from this list: ")
+                print(colors[0], end="")
+                for i in range(len(colors) - 1):
+                    print(", ", end = "")
+                    print(colors[i + 1], end= "")
+                print("")
+            else:
+                print("Painting the car", end="")
+                paintCar(car_name, color)
+                for i in range(5):
+                    time.sleep(0.5)
+                    print(".", end="")
+                print("")
+                print("Done! ")
+                break
+                
+            color = input("What color would you like to paint the car? Type 'list' to view all of the colors. ")
         
     
-def paintCar():
-    #temp
-    print("", end="")
+def paintCar(car_name, color):
+    car_file_name = car_name + ".png"
+
+    car_image = Image.open(car_file_name)
+    rgb_car_image = car_image.convert("RGB")
+    pixeldata = car_image.load()
+
+    for x in range(car_image.size[0]):
+        for y in range(car_image.size[1]):
+            r, g, b = rgb_car_image.getpixel((x, y))
+
+            if g == 255:
+                if color == "red":
+                    pixeldata[x, y] = (255, 0, 0)
+                elif color == "blue":
+                    pixeldata[x, y] = (0, 0, 255)
+                elif color == "yellow":
+                    pixeldata[x, y] = (255, 255, 0)
+            elif g == 100:
+                if color == "red":
+                    pixeldata[x, y] = (100, 0, 0)
+                elif color == "blue":
+                    pixeldata[x, y] = (0, 0, 100)
+                elif color == "yellow":
+                    pixeldata[x, y] = (100, 100, 0)
+
+    file_path = "/home/zsteck/Desktop/car_builder/finished_cars/"
+
+    if color == "red":
+        car_new_name = file_path + "red_" + car_file_name
+    elif color == "blue":
+        car_new_name = file_path + "blue_" + car_file_name
+    elif color == "yellow":
+        car_new_name = file_path + "yellow_" + car_file_name
+        
+    #car_image.show()
+    car_image.save(car_new_name)
     
 def wrapCar():
     #temp
