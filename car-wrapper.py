@@ -11,9 +11,31 @@ from PIL import Image
 print("This program only works with cars taht already exist. It cannot create new cars for you. ")
 print("If you do not already have a car, please use 'car_builder' to create one and then come back. ")
 
-def stockPicGenerator(car_name):
-    car_file_name = car_name + ".jpeg"
-    car_image = Image.open(car_file_name)
+def stockPicGenerator(car_name, car_model):
+    car_file_name = car_name + ".png"
+    car_file_model = car_model + ".png"
+
+    try:
+        car_image = Image.open(car_file_name)
+    except FileNotFoundError:
+        print("No picture with that car's name are found.")
+        create_stock = input("Do you want to create a stock image of the car to use? [y/N] ")
+        if create_stock.lower() == "y":
+            try:
+                car_image = Image.open(car_file_model)
+            except FileNotFoundError:
+                print("No picture's of that car model are found. The model might not be in the game yet.")
+                print("Sorry, but there is nothing this program can do for you. ")
+                time.sleep(2)
+                print("Goodbye.")
+                time.sleep(3)
+                exit()
+        else:
+            print("Okay. There is nothing this program can do for you. ")
+            time.sleep(2)
+            print("Goodbye.")
+            time.sleep(3)
+            exit()
 
     rgb_car_image = car_image.convert("RGB")
 
@@ -23,27 +45,34 @@ def stockPicGenerator(car_name):
 
     pixeldata = car_image.load()
 
-    car_image.show()
+    #car_image.show()
 
     print("Perparing the car for paint/wrap", end="")
     for i in range(5):
         time.sleep(0.5)
         print(".", end="")
     print("")
+    print("Done!")
     
     
     for x in range(car_image.size[0]):
         for y in range(car_image.size[1]):
             r, g, b = rgb_car_image.getpixel((x, y))
-            if r > 4 and r < 100:
-                if g > 19 and g < 125:
-                    if b > 70 and b < 232:
+            if r == 10 and g == 35 and b == 118:
+                pixeldata[x, y] = (0, 100, 0, 255)
+            elif r == 5 and g == 20 and b == 71:
+                pixeldata[x, y] = (0, 100, 0, 255)
+            elif r == 10 and g == 35 and b == 118:
+                pixeldata[x, y] = (0, 100, 0, 255)
+            elif r > 6 and r < 100:
+                if g > 21 and g < 125:
+                    if b > 71 and b < 232:
                         pixeldata[x, y] = (0, 255, 0, 255)
                 
 
-    car_image.save("stock.png")
+    car_image.save(car_file_name)
 
-    car_image.show()
+    #car_image.show()
 
 def getCar():
     car_model = input("What model car do you want to work on? ")
@@ -51,18 +80,19 @@ def getCar():
 
     #car_file = open(car_name, "r")
 
-    modded = input("Does your car have any visual mods? ")
+    modded = input("Does your car have any visual mods? [y/N] ")
     if "y" in modded.lower():
         modded = True
     else:
         modded = False
 
-    print("Generating an image of the stock car", end="")
+    print("Getting the image of the car", end="")
     for i in range(5):
         time.sleep(0.5)
         print(".", end="")
     print("")
-    stockPicGenerator(car_name)
+    print("Done! ")
+    stockPicGenerator(car_name, car_model)
     
     if modded:
         print("Applying visual mods to the car", end="")
@@ -70,7 +100,7 @@ def getCar():
             time.sleep(0.5)
             print(".", end="")
         print("")
-        print("Visual mods applied! ")
+        print("Done! ")
         
     
 def paintCar():
@@ -84,3 +114,5 @@ def wrapCar():
 def showCar():
     #temp
     print("", end="")
+
+getCar()
