@@ -8,8 +8,10 @@
 import time
 from PIL import Image
 
-print("This program only works with cars taht already exist. It cannot create new cars for you. ")
-print("If you do not already have a car, please use 'car_builder' to create one and then come back. ")
+def start():
+    print("This program only works with cars taht already exist. It cannot create new cars for you. ")
+    print("If you do not already have a car, please use 'car_builder' to create one and then come back. ")
+    getCar()
 
 def stockPicGenerator(car_name, car_model):
     car_file_name = car_name + ".png"
